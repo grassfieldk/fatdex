@@ -12,7 +12,7 @@ export default function Home() {
   const stats = calcStats(profile, data);
 
   return (
-    <Container size="lg" py="xl" w="100%">
+    <Container size="lg" px={{ base: "sm", sm: "md" }} py={{ base: "md", sm: "xl" }} w="100%">
       <Stack gap="md">
         <PriceHeader profile={profile} stats={stats} />
         <SectionCard>

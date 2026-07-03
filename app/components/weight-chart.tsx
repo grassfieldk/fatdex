@@ -9,7 +9,7 @@ import {
   type ISeriesApi,
   type Time,
 } from "lightweight-charts";
-import { Group, Stack, useComputedColorScheme } from "@mantine/core";
+import { Box, Group, Stack, useComputedColorScheme } from "@mantine/core";
 import type { WeightCandle } from "@/lib/types";
 import { ChartControls, PERIODS, type PeriodKey } from "./chart-controls";
 
@@ -57,7 +57,6 @@ export function WeightChart({ candles }: WeightChartProps) {
     if (!container) return;
 
     const chart = createChart(container, {
-      height: 400,
       autoSize: true,
       localization: {
         priceFormatter: (price: number) => `${price.toFixed(1)} kg`,
@@ -96,7 +95,7 @@ export function WeightChart({ candles }: WeightChartProps) {
       <Group justify="flex-end">
         <ChartControls active={period} onChange={setPeriod} />
       </Group>
-      <div ref={containerRef} style={{ height: 400, width: "100%" }} />
+      <Box ref={containerRef} h={{ base: 280, sm: 400 }} w="100%" />
     </Stack>
   );
 }
