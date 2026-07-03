@@ -1,4 +1,4 @@
-import type { WeightCandle, WeightProfile } from "./types";
+import type { WeightCandle, WeightProfile, WeightStock } from "./types";
 
 export type WeightStats = {
   latestClose: number;
@@ -51,6 +51,28 @@ export function calcStats(
     bmiCategory: bmiCategoryOf(bmi),
     targetDiff: latest.close - profile.targetWeight,
     startDiff: latest.close - profile.startWeight,
+  };
+}
+
+/** 一覧表示用のサマリー。Client Component にそのまま渡せる plain object */
+export type StockSummary = {
+  ticker: string;
+  name: string;
+  sector: string;
+  latestClose: number;
+  change: number;
+  changePct: number;
+};
+
+export function toSummary(stock: WeightStock): StockSummary {
+  const stats = calcStats(stock.profile, stock.data);
+  return {
+    ticker: stock.profile.ticker,
+    name: stock.profile.name,
+    sector: stock.profile.sector,
+    latestClose: stats.latestClose,
+    change: stats.change,
+    changePct: stats.changePct,
   };
 }
 

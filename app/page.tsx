@@ -1,25 +1,31 @@
-import { Container, Stack } from "@mantine/core";
-import { getWeightData } from "@/lib/weight";
-import { calcStats } from "@/lib/stats";
-import { PriceHeader } from "./components/price-header";
-import { WeightChart } from "./components/weight-chart";
-import { StatGrid } from "./components/stat-grid";
-import { ProfileCard } from "./components/profile-card";
+import { Container, Group, Stack, Text, Title } from "@mantine/core";
+import { getStocks } from "@/lib/weight";
+import { toSummary } from "@/lib/stats";
+import { StockTable } from "./components/stock-table";
+import { ThemeToggle } from "./components/theme-toggle";
 import { SectionCard } from "./components/ui/section-card";
 
 export default function Home() {
-  const { profile, data } = getWeightData();
-  const stats = calcStats(profile, data);
+  const summaries = getStocks().map(toSummary);
 
   return (
     <Container size="lg" px={{ base: "sm", sm: "md" }} py={{ base: "md", sm: "xl" }} w="100%">
       <Stack gap="md">
-        <PriceHeader profile={profile} stats={stats} />
-        <SectionCard>
-          <WeightChart candles={data} />
+        <Group justify="space-between" align="flex-start">
+          <Stack gap={4}>
+            <Title order={1} fz={{ base: "h3", sm: "h2" }}>
+              fatdex
+            </Title>
+            <Text size="sm" c="dimmed">
+              体重取引所 — 上場デブ一覧
+            </Text>
+          </Stack>
+          <ThemeToggle />
+        </Group>
+
+        <SectionCard title={`上場銘柄 (${summaries.length})`}>
+          <StockTable stocks={summaries} />
         </SectionCard>
-        <StatGrid stats={stats} />
-        <ProfileCard profile={profile} stats={stats} />
       </Stack>
     </Container>
   );

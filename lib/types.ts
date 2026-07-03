@@ -25,7 +25,12 @@ export type WeightCandle = {
   close: number;
 };
 
-export type WeightData = {
+/** 1銘柄 = 1人のデブ */
+export type WeightStock = {
   profile: WeightProfile;
   data: WeightCandle[];
+};
+
+export type WeightData = {
+  stocks: WeightStock[];
 };
