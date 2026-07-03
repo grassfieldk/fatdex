@@ -1,16 +1,29 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container, Stack } from "@mantine/core";
 import { getStock, getStocks } from "@/lib/weight";
 import { calcStats } from "@/lib/stats";
-import { BackLink } from "../../components/back-link";
-import { PriceHeader } from "../../components/price-header";
-import { WeightChart } from "../../components/weight-chart";
-import { StatGrid } from "../../components/stat-grid";
-import { ProfileCard } from "../../components/profile-card";
-import { SectionCard } from "../../components/ui/section-card";
+import { BackLink } from "@/app/components/back-link";
+import { PriceHeader } from "@/app/components/price-header";
+import { WeightChart } from "@/app/components/weight-chart";
+import { StatGrid } from "@/app/components/stat-grid";
+import { ProfileCard } from "@/app/components/profile-card";
+import { SectionCard } from "@/app/components/ui/section-card";
 
 export function generateStaticParams() {
   return getStocks().map((stock) => ({ ticker: stock.profile.ticker }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ ticker: string }>;
+}): Promise<Metadata> {
+  const { ticker } = await params;
+  const stock = getStock(ticker);
+  if (!stock) return {};
+  const { name, ticker: code } = stock.profile;
+  return { title: `${name} (${code}) - fatdex` };
 }
 
 export default async function StockPage({

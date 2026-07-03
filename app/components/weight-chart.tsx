@@ -84,9 +84,9 @@ export function WeightChart({ candles }: WeightChartProps) {
     const series = seriesRef.current;
     if (!series) return;
 
+    // slice(-Infinity) は全件を返すため ALL もこの1行で扱える
     const days = PERIODS.find((p) => p.key === period)?.days ?? Infinity;
-    const visible = Number.isFinite(days) ? candles.slice(-days) : candles;
-    series.setData(visible as CandlestickData<Time>[]);
+    series.setData(candles.slice(-days) as CandlestickData<Time>[]);
     chartRef.current?.timeScale().fitContent();
   }, [candles, period]);
 

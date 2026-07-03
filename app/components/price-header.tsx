@@ -1,39 +1,15 @@
 import { Badge, Group, Stack, Text, Title } from "@mantine/core";
-import {
-  IconArrowRight,
-  IconTrendingDown,
-  IconTrendingUp,
-} from "@tabler/icons-react";
 import type { WeightProfile } from "@/lib/types";
-import {
-  formatDateJa,
-  formatSigned,
-  toneOfChange,
-  type WeightStats,
-} from "@/lib/stats";
+import { formatDateJa, type WeightStats } from "@/lib/stats";
 import { ThemeToggle } from "./theme-toggle";
-
-const changeColors = {
-  up: "teal.6",
-  down: "red.6",
-  default: "dimmed",
-} as const;
+import { ChangeIndicator } from "./ui/change-indicator";
 
 type PriceHeaderProps = {
   profile: WeightProfile;
   stats: WeightStats;
 };
 
-const trendIcons = {
-  up: IconTrendingUp,
-  down: IconTrendingDown,
-  default: IconArrowRight,
-} as const;
-
 export function PriceHeader({ profile, stats }: PriceHeaderProps) {
-  const tone = toneOfChange(stats.change);
-  const TrendIcon = trendIcons[tone];
-
   return (
     <Stack gap="xs">
       <Group justify="space-between" align="flex-start" wrap="nowrap">
@@ -58,12 +34,13 @@ export function PriceHeader({ profile, stats }: PriceHeaderProps) {
             kg
           </Text>
         </Text>
-        <Group gap={4} c={changeColors[tone]} align="center" wrap="nowrap">
-          <TrendIcon size={20} stroke={2} />
-          <Text ff="monospace" fz={{ base: "md", sm: "lg" }} fw={600} c="inherit">
-            {formatSigned(stats.change)} kg ({formatSigned(stats.changePct, 2)}%)
-          </Text>
-        </Group>
+        <ChangeIndicator
+          change={stats.change}
+          changePct={stats.changePct}
+          unit="kg"
+          fz={{ base: "md", sm: "lg" }}
+          iconSize={20}
+        />
         <Text size="xs" c="dimmed">
           {formatDateJa(stats.latestDate)}時点
         </Text>

@@ -3,29 +3,9 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Badge, Group, Stack, Table, Text, TextInput } from "@mantine/core";
-import {
-  IconArrowRight,
-  IconSearch,
-  IconTrendingDown,
-  IconTrendingUp,
-} from "@tabler/icons-react";
-import {
-  formatSigned,
-  toneOfChange,
-  type StockSummary,
-} from "@/lib/stats";
-
-const changeColors = {
-  up: "teal.6",
-  down: "red.6",
-  default: "dimmed",
-} as const;
-
-const trendIcons = {
-  up: IconTrendingUp,
-  down: IconTrendingDown,
-  default: IconArrowRight,
-} as const;
+import { IconSearch } from "@tabler/icons-react";
+import type { StockSummary } from "@/lib/stats";
+import { ChangeIndicator } from "./ui/change-indicator";
 
 type StockTableProps = {
   stocks: StockSummary[];
@@ -66,8 +46,6 @@ export function StockTable({ stocks }: StockTableProps) {
           </Table.Thead>
           <Table.Tbody>
             {filtered.map((stock) => {
-              const tone = toneOfChange(stock.change);
-              const TrendIcon = trendIcons[tone];
               return (
                 <Table.Tr
                   key={stock.ticker}
@@ -95,12 +73,11 @@ export function StockTable({ stocks }: StockTableProps) {
                     </Text>
                   </Table.Td>
                   <Table.Td ta="right">
-                    <Group gap={4} justify="flex-end" c={changeColors[tone]} wrap="nowrap">
-                      <TrendIcon size={16} />
-                      <Text size="sm" ff="monospace" fw={600} c="inherit">
-                        {formatSigned(stock.change)} ({formatSigned(stock.changePct, 2)}%)
-                      </Text>
-                    </Group>
+                    <ChangeIndicator
+                      change={stock.change}
+                      changePct={stock.changePct}
+                      justify="flex-end"
+                    />
                   </Table.Td>
                 </Table.Tr>
               );

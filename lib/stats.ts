@@ -35,6 +35,7 @@ export function calcStats(
   const prev = candles[candles.length - 2] ?? latest;
 
   const change = latest.close - prev.close;
+  const last52w = candles.slice(-365);
   const last30 = candles.slice(-30);
   const heightM = profile.height / 100;
   const bmi = latest.close / (heightM * heightM);
@@ -44,8 +45,8 @@ export function calcStats(
     latestDate: latest.time,
     change,
     changePct: (change / prev.close) * 100,
-    high52w: Math.max(...candles.map((c) => c.high)),
-    low52w: Math.min(...candles.map((c) => c.low)),
+    high52w: Math.max(...last52w.map((c) => c.high)),
+    low52w: Math.min(...last52w.map((c) => c.low)),
     avg30d: last30.reduce((sum, c) => sum + c.close, 0) / last30.length,
     bmi,
     bmiCategory: bmiCategoryOf(bmi),
@@ -76,8 +77,10 @@ export function toSummary(stock: WeightStock): StockSummary {
   };
 }
 
+export type Tone = "up" | "down" | "default";
+
 /** 株価流: 上昇=緑(up)、下落=赤(down)。体重でも意味なくこれに従う */
-export function toneOfChange(change: number): "up" | "down" | "default" {
+export function toneOfChange(change: number): Tone {
   if (change > 0) return "up";
   if (change < 0) return "down";
   return "default";
