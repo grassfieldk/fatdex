@@ -9,32 +9,34 @@ import {
   type ISeriesApi,
   type Time,
 } from "lightweight-charts";
-import { useTheme } from "next-themes";
+import { Group, Stack, useComputedColorScheme } from "@mantine/core";
 import type { WeightCandle } from "@/lib/types";
 import { ChartControls, PERIODS, type PeriodKey } from "./chart-controls";
 
+// Mantine の teal.5 / red.6 に合わせる
 const CANDLE_COLORS = {
-  upColor: "#22c55e",
-  downColor: "#ef4444",
-  borderUpColor: "#22c55e",
-  borderDownColor: "#ef4444",
-  wickUpColor: "#22c55e",
-  wickDownColor: "#ef4444",
+  upColor: "#20c997",
+  downColor: "#fa5252",
+  borderUpColor: "#20c997",
+  borderDownColor: "#fa5252",
+  wickUpColor: "#20c997",
+  wickDownColor: "#fa5252",
 } as const;
 
+// Mantine の gray / dark パレットに合わせたチャート配色
 function themeOptions(isDark: boolean) {
   return {
     layout: {
       background: { color: "transparent" },
-      textColor: isDark ? "#9ca3af" : "#6b7280",
+      textColor: isDark ? "#909296" : "#868e96",
       attributionLogo: false,
     },
     grid: {
-      vertLines: { color: isDark ? "#1f2937" : "#f3f4f6" },
-      horzLines: { color: isDark ? "#1f2937" : "#f3f4f6" },
+      vertLines: { color: isDark ? "#2e2e2e" : "#f1f3f5" },
+      horzLines: { color: isDark ? "#2e2e2e" : "#f1f3f5" },
     },
-    timeScale: { borderColor: isDark ? "#374151" : "#e5e7eb" },
-    rightPriceScale: { borderColor: isDark ? "#374151" : "#e5e7eb" },
+    timeScale: { borderColor: isDark ? "#424242" : "#dee2e6" },
+    rightPriceScale: { borderColor: isDark ? "#424242" : "#dee2e6" },
   };
 }
 
@@ -47,8 +49,7 @@ export function WeightChart({ candles }: WeightChartProps) {
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
   const [period, setPeriod] = useState<PeriodKey>("3M");
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const isDark = useComputedColorScheme("light") === "dark";
 
   // チャートの生成・破棄（初回のみ）
   useEffect(() => {
@@ -91,11 +92,11 @@ export function WeightChart({ candles }: WeightChartProps) {
   }, [candles, period]);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex justify-end">
+    <Stack gap="sm">
+      <Group justify="flex-end">
         <ChartControls active={period} onChange={setPeriod} />
-      </div>
-      <div ref={containerRef} className="h-[400px] w-full" />
-    </div>
+      </Group>
+      <div ref={containerRef} style={{ height: 400, width: "100%" }} />
+    </Stack>
   );
 }

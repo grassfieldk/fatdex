@@ -1,3 +1,4 @@
+import { SimpleGrid } from "@mantine/core";
 import {
   formatSigned,
   toneOfChange,
@@ -13,7 +14,7 @@ type StatGridProps = {
 export function StatGrid({ stats }: StatGridProps) {
   return (
     <SectionCard title="サマリー統計">
-      <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <SimpleGrid cols={{ base: 2, sm: 3, lg: 6 }} spacing="md">
         <StatItem label="52週高値" value={`${stats.high52w.toFixed(1)} kg`} />
         <StatItem label="52週安値" value={`${stats.low52w.toFixed(1)} kg`} />
         <StatItem label="30日平均" value={`${stats.avg30d.toFixed(1)} kg`} />
@@ -28,7 +29,7 @@ export function StatGrid({ stats }: StatGridProps) {
           value={`${formatSigned(stats.startDiff)} kg`}
           tone={toneOfChange(stats.startDiff)}
         />
-      </dl>
+      </SimpleGrid>
     </SectionCard>
   );
 }

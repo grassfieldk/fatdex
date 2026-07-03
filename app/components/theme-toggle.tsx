@@ -1,20 +1,30 @@
 "use client";
 
-import { useTheme } from "next-themes";
+import {
+  ActionIcon,
+  Box,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from "@mantine/core";
 
 export function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { setColorScheme } = useMantineColorScheme();
+  const computed = useComputedColorScheme("light");
 
   return (
-    <button
-      type="button"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+    <ActionIcon
+      variant="default"
+      size="lg"
       aria-label="テーマ切替"
-      className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800"
+      onClick={() => setColorScheme(computed === "dark" ? "light" : "dark")}
     >
-      {/* SSR 時はテーマ不明のため、表示は CSS の dark クラスだけで切り替える */}
-      <span className="dark:hidden">🌙</span>
-      <span className="hidden dark:inline">☀️</span>
-    </button>
+      {/* SSR 時はテーマが確定しないため、アイコンの出し分けは CSS のみで行う */}
+      <Box component="span" darkHidden>
+        🌙
+      </Box>
+      <Box component="span" lightHidden>
+        ☀️
+      </Box>
+    </ActionIcon>
   );
 }

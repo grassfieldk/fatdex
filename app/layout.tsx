@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "./components/theme-provider";
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
+import { theme } from "./theme";
+import "@mantine/core/styles.css";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,14 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // suppressHydrationWarning: next-themes が SSR 後に html へ class を付与するため
     <html
       lang="ja"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      {...mantineHtmlProps}
     >
-      <body className="min-h-full flex flex-col bg-gray-50 dark:bg-gray-950">
-        <ThemeProvider>{children}</ThemeProvider>
+      <head>
+        <ColorSchemeScript defaultColorScheme="auto" />
+      </head>
+      <body>
+        <MantineProvider theme={theme} defaultColorScheme="auto">
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );
