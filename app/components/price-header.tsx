@@ -1,4 +1,9 @@
 import { Badge, Group, Stack, Text, Title } from "@mantine/core";
+import {
+  IconArrowRight,
+  IconTrendingDown,
+  IconTrendingUp,
+} from "@tabler/icons-react";
 import type { WeightProfile } from "@/lib/types";
 import {
   formatDateJa,
@@ -19,9 +24,15 @@ type PriceHeaderProps = {
   stats: WeightStats;
 };
 
+const trendIcons = {
+  up: IconTrendingUp,
+  down: IconTrendingDown,
+  default: IconArrowRight,
+} as const;
+
 export function PriceHeader({ profile, stats }: PriceHeaderProps) {
   const tone = toneOfChange(stats.change);
-  const arrow = tone === "up" ? "▲" : tone === "down" ? "▼" : "—";
+  const TrendIcon = trendIcons[tone];
 
   return (
     <Stack gap="xs">
@@ -47,10 +58,12 @@ export function PriceHeader({ profile, stats }: PriceHeaderProps) {
             kg
           </Text>
         </Text>
-        <Text ff="monospace" fz={{ base: "md", sm: "lg" }} fw={600} c={changeColors[tone]}>
-          {arrow} {formatSigned(stats.change)} kg (
-          {formatSigned(stats.changePct, 2)}%)
-        </Text>
+        <Group gap={4} c={changeColors[tone]} align="center" wrap="nowrap">
+          <TrendIcon size={20} stroke={2} />
+          <Text ff="monospace" fz={{ base: "md", sm: "lg" }} fw={600} c="inherit">
+            {formatSigned(stats.change)} kg ({formatSigned(stats.changePct, 2)}%)
+          </Text>
+        </Group>
         <Text size="xs" c="dimmed">
           {formatDateJa(stats.latestDate)}時点
         </Text>

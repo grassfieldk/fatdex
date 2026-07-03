@@ -6,6 +6,7 @@ import {
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
+import { IconMoon, IconSun } from "@tabler/icons-react";
 
 export function ThemeToggle() {
   const { setColorScheme } = useMantineColorScheme();
@@ -19,11 +20,11 @@ export function ThemeToggle() {
       onClick={() => setColorScheme(computed === "dark" ? "light" : "dark")}
     >
       {/* SSR 時はテーマが確定しないため、アイコンの出し分けは CSS のみで行う */}
-      <Box component="span" darkHidden>
-        🌙
+      <Box component="span" darkHidden lh={0}>
+        <IconMoon size={18} stroke={1.5} />
       </Box>
-      <Box component="span" lightHidden>
-        ☀️
+      <Box component="span" lightHidden lh={0}>
+        <IconSun size={18} stroke={1.5} />
       </Box>
     </ActionIcon>
   );
